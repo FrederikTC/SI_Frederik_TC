@@ -1,8 +1,9 @@
-const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js');
 const yaml = require('js-yaml');
 
+const express = require('express');
+const axios = require('axios'); // Ensure axios is installed using `npm install axios`
 const app = express();
 const port = 3000;
 
@@ -67,6 +68,19 @@ app.get('/yaml', async (req, res) => {
   }
 });
 
+app.get('/fetch-from-server-b/:data_type', async (req, res) => {
+  try {
+    const { data_type } = req.params;
+    // Replace 'server_b_url' with the actual URL of Server B
+    const server_b_url = `http://localhost:5000/${data_type}`;
+    const response = await axios.get(server_b_url);
+    res.set('Content-Type', response.headers['content-type']);
+    res.send(response.data);
+  } catch (error) {
+    res.status(500).send('Error fetching data from Server B');
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Server A listening at http://localhost:${port}`);
 });
