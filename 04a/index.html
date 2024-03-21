@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE Example</title>
+</head>
+<body>
+    <h1>Server-Sent Events Example</h1>
+    <div id="events"></div>
+
+    <script>
+        const evtSource = new EventSource('/events');
+        evtSource.onmessage = function(event) {
+            const newElement = document.createElement("p");
+            const eventObject = JSON.parse(event.data);
+            newElement.textContent = `Message: ${eventObject.message} - Timestamp: ${eventObject.timestamp}`;
+            document.getElementById("events").appendChild(newElement);
+        };
+    </script>
+</body>
+</html>
